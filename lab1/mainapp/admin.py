@@ -8,20 +8,17 @@ from .models import Medicine
 
 @admin.register(Medicine)
 class MedicineAdmin(admin.ModelAdmin):
-    list_display = ['name', 'manufacturer', 'price', 'quantity_in_stock', 'expiration_date', 'is_available']
-    list_filter = ['category', 'requires_prescription', 'expiration_date']
-    search_fields = ['name', 'manufacturer']
-    readonly_fields = ['created_at', 'updated_at']
+    list_display = ['name', 'manufacturer', 'price', 'quantity_in_stock', 
+                   'expiration_date', 'requires_prescription']
+    list_filter = ['requires_prescription', 'expiration_date']
+    search_fields = ['name', 'manufacturer', 'description']
+    readonly_fields = []
     
     fieldsets = (
         ('Основная информация', {
-            'fields': ('name', 'manufacturer', 'category', 'price')
+            'fields': ('name', 'manufacturer', 'price', 'description')
         }),
-        ('Складская информация', {
+        ('Склад и срок годности', {
             'fields': ('quantity_in_stock', 'expiration_date', 'requires_prescription')
-        }),
-        ('Системная информация', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
         }),
     )

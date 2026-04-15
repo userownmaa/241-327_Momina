@@ -6,20 +6,19 @@ from .models import Medicine
 
 fk = Faker('ru_RU')
 
-def gentestdata():
+def gentestdata(n=200):
     with transaction.atomic():
-        for _ in range(150):
+        for _ in range(n):
             entry_date = fk.date_between(start_date=date(2020, 1, 1), end_date=date.today())
             expires = entry_date + timedelta(days=random.randint(30, 730))
             
-            med = Medicine(
-                name=fk.catch_phrase()[:100],
-                price=round(random.uniform(50, 5000), 2),
-                quantity_in_stock=random.randint(5, 500),
+            Medicine.objects.create(
+                name=fk.catch_phrase()[:120],
+                price=round(random.uniform(50, 4500), 2),
+                quantity_in_stock=random.randint(10, 500),
                 expiration_date=expires,
                 manufacturer=fk.company(),
-                requires_prescription=random.random() > 0.7,
-                description=fk.text(max_nb_chars=200)
+                requires_prescription=random.choice([True, False]),
+                description=fk.text(max_nb_chars=250)
             )
-            med.save()
-    print('Сгенерировано 1000 лекарств!')
+    print(f'Сгенерировано {n} лекарств')
