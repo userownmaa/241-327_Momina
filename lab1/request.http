@@ -1,0 +1,49 @@
+@baseUrl = http://127.0.0.1:8000/api
+
+### 1. LIST — Получить все лекарства
+GET {{baseUrl}}/medicine/
+Content-Type: application/json
+
+### 2. CREATE — Добавить новое лекарство
+POST {{baseUrl}}/medicine/
+Content-Type: application/json
+
+{
+    "name": "Парацетамол",
+    "price": 150.50,
+    "quantity_in_stock": 200,
+    "expiration_date": "2027-12-31",
+    "manufacturer": "Фармстандарт",
+    "requires_prescription": false,
+    "description": "Жаропонижающее и обезболивающее средство"
+}
+
+### 3. RETRIEVE — Получить одно лекарство по ID
+GET {{baseUrl}}/medicine/1/
+Content-Type: application/json
+
+### 4. UPDATE (PUT) — Полное обновление лекарства
+PUT {{baseUrl}}/medicine/1/
+Content-Type: application/json
+
+{
+    "name": "Парацетамол обновлённый",
+    "price": 180.00,
+    "quantity_in_stock": 150,
+    "expiration_date": "2028-01-15",
+    "manufacturer": "Фармстандарт",
+    "requires_prescription": false,
+    "description": "Новое описание"
+}
+
+### 5. DELETE — Удалить лекарство
+DELETE {{baseUrl}}/medicine/1/
+Content-Type: application/json
+
+### 6. FILTER примеры (если позже добавишь django-filter)
+
+### Поиск по названию
+GET {{baseUrl}}/medicine/?search=парацетамол
+
+### Только по рецепту
+GET {{baseUrl}}/medicine/?requires_prescription=true
