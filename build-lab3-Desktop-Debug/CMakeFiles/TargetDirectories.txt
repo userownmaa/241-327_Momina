@@ -1,0 +1,4 @@
+/home/admin/Desktop/po_design/241-327_Momina/build-lab3-Desktop-Debug/CMakeFiles/lab3.dir
+/home/admin/Desktop/po_design/241-327_Momina/build-lab3-Desktop-Debug/CMakeFiles/edit_cache.dir
+/home/admin/Desktop/po_design/241-327_Momina/build-lab3-Desktop-Debug/CMakeFiles/rebuild_cache.dir
+/home/admin/Desktop/po_design/241-327_Momina/build-lab3-Desktop-Debug/CMakeFiles/lab3_autogen.dir

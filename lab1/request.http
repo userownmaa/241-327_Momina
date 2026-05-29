@@ -1,10 +1,12 @@
 @baseUrl = http://127.0.0.1:8000/api
 
-### 1. LIST — Получить все лекарства
+### 1. LIST 
+
 GET {{baseUrl}}/medicine/
 Content-Type: application/json
 
-### 2. CREATE — Добавить новое лекарство
+### 2. CREATE
+
 POST {{baseUrl}}/medicine/
 Content-Type: application/json
 
@@ -18,12 +20,12 @@ Content-Type: application/json
     "description": "Жаропонижающее и обезболивающее средство"
 }
 
-### 3. RETRIEVE — Получить одно лекарство по ID
-GET {{baseUrl}}/medicine/1/
+### 3. RETRIEVE
+GET {{baseUrl}}/medicine/203/
 Content-Type: application/json
 
-### 4. UPDATE (PUT) — Полное обновление лекарства
-PUT {{baseUrl}}/medicine/1/
+### 4. UPDATE (PUT)
+PUT {{baseUrl}}/medicine/204/
 Content-Type: application/json
 
 {
@@ -36,11 +38,11 @@ Content-Type: application/json
     "description": "Новое описание"
 }
 
-### 5. DELETE — Удалить лекарство
-DELETE {{baseUrl}}/medicine/1/
+### 5. DELETE 
+DELETE {{baseUrl}}/medicine/206/
 Content-Type: application/json
 
-### 6. FILTER примеры (если позже добавишь django-filter)
+### 6. FILTER
 
 ### Поиск по названию
 GET {{baseUrl}}/medicine/?search=парацетамол

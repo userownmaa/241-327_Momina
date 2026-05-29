@@ -1,0 +1,78 @@
+name: lab2
+
+services:
+  postgres-service:
+    image: postgres:alpine
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata   # PGDATA указывает PostgreSQL, в какую директорию внутри контейнера сохранять файлы базы данных
+    ports:
+      - "5433:5432"  
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck: 
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s 
+      timeout: 5s
+      retries: 5 
+      start_period: 10s
+    restart: unless-stopped
+
+  #cборка образа из Dockerfile, который находится в папке ./backend
+  migration-service:
+    build: ./backend
+    env_file:
+      - .env
+    depends_on:
+      postgres-service:
+        condition: service_healthy
+    command: python manage.py migrate
+    restart: "no" #никогда не перезапускать, ьиграции должны выполниться один раз и завершиться
+
+  backend-service:
+    build: ./backend
+    env_file:
+      - .env
+    ports:
+      - "8000"
+    volumes:
+    #собираются статические файлы Django, том используется для обмена файлами между backend-service и nginx-service
+      - static_volume:/backend/staticfiles
+    depends_on:
+      postgres-service:
+        condition: service_healthy
+      migration-service:
+        condition: service_completed_successfully
+    command: gunicorn lab1.wsgi:application --bind 0.0.0.0:8000
+    restart: unless-stopped
+
+  nginx-service:
+  #cборка образа Nginx из папки ./nginx, где свой Dockerfile и конфигурационные файлы
+    build: ./nginx
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - static_volume:/static   
+      # - ./nginx/ssl:/etc/nginx/ssl   
+    secrets:                           
+      - source: lab2.crt
+        target: /run/secrets/lab2.crt  #куда монтировать внутри контейнера
+        mode: 0400        #права только чтение для владельца
+      - source: lab2.key
+        target: /run/secrets/lab2.key
+        mode: 0400
+    depends_on:
+      - backend-service
+    restart: unless-stopped
+
+secrets:                               
+  lab2.crt:
+    file: ./secrets/lab2.crt          
+  lab2.key:
+    file: ./secrets/lab2.key
+
+volumes:
+  postgres_data:
+  static_volume:
